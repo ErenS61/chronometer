@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronomètre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000000;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+        }
+        #timer {
+            font-size: 16vw;
+            font-weight: bold;
+            line-height: 1;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        #milliseconds {
+            font-size: 5vw;
+        }
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            font-size: 1rem;
+            padding: 8px 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        #start { background-color: #4CAF50; color: white; }
+        #stop { background-color: #f44336; color: white; }
+        #reset { background-color: #008CBA; color: white; }
+    </style>
+</head>
+<body>
+    <div id="timer">00:00:00<span id="milliseconds">.000</span></div>
+    <div class="controls">
+        <button id="start">Démarrer</button>
+        <button id="stop">Arrêter</button>
+        <button id="reset">Réinitialiser</button>
+    </div>
+
+    <script>
+        let timer;
+        let milliseconds = 0;
+        let running = false;
+
+        function updateTimer() {
+            let hrs = String(Math.floor(milliseconds / 3600000)).padStart(2, '0');
+            let mins = String(Math.floor((milliseconds % 3600000) / 60000)).padStart(2, '0');
+            let secs = String(Math.floor((milliseconds % 60000) / 1000)).padStart(2, '0');
+            let ms = String(milliseconds % 1000).padStart(3, '0');
+            document.getElementById("timer").innerHTML = `${hrs}:${mins}:${secs}<span id="milliseconds">.${ms}</span>`;
+        }
+
+        document.getElementById("start").addEventListener("click", function() {
+            if (!running) {
+                running = true;
+                timer = setInterval(() => {
+                    milliseconds += 10;
+                    updateTimer();
+                }, 10);
+            }
+        });
+
+        document.getElementById("stop").addEventListener("click", function() {
+            running = false;
+            clearInterval(timer);
+        });
+
+        document.getElementById("reset").addEventListener("click", function() {
+            running = false;
+            clearInterval(timer);
+            milliseconds = 0;
+            updateTimer();
+        });
+    </script>
+</body>
+</html>
